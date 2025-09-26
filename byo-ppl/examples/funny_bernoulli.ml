@@ -2,11 +2,11 @@ open Byoppl
 open Distribution
 open Basic.Rejection_sampling_hard
 
-let funny_bernoulli prob () =
-  let a = sample prob (bernoulli ~p:0.5) in
-  let b = sample prob (bernoulli ~p:0.5) in
-  let c = sample prob (bernoulli ~p:0.5) in
-  let () = assume prob (a || b) in
+let funny_bernoulli () =
+  let a = sample (bernoulli ~p:0.5) in
+  let b = sample (bernoulli ~p:0.5) in
+  let c = sample (bernoulli ~p:0.5) in
+  let () = assume (a || b) in
   Bool.to_int a + Bool.to_int b + Bool.to_int c
 
 let _ =
