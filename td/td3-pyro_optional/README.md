@@ -1,5 +1,3 @@
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/gbdrt/pyro-intro/HEAD)
-
 # Une courte introduction à Pyro
 
 https://pyro.ai/
@@ -25,6 +23,9 @@ On peut ensuite executer le notebook `pyro-intro.ipynb`, par exemple avec Jupyte
 ```
 jupyter lab
 ```
+
+## Or run on collab
+
 - Pyro intro <a target="_blank" href="https://colab.research.google.com/github/mpri-probprog/probprog-25-26/blob/main/td/td3-pyro_optional/pyro-intro.ipynb">
   <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
 </a>
