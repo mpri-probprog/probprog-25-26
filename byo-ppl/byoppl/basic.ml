@@ -1,18 +1,31 @@
 module Rejection_sampling_hard = struct
-  let sample _d = assert false
-  let assume _p = assert false
-  let observe _d _x = assert false
+  type prob = Prob
 
-  let infer ?(_n = 1000) _model _obs =
-    assert false
+  exception Reject
+  let sample _prob d = Distribution.draw d
+  let assume _prob p = if not p then raise Reject 
+  let observe prob d x =
+    let y = sample prob d in
+    assume prob (y = x)
+
+  let infer ?(n = 1000) model obs =
+    let rec gen i = try model Prob obs with Reject -> gen i in
+    let samples = List.init n gen in
+    Distribution.empirical ~samples
 end
 
 module Importance_sampling = struct
-  let sample _prob _d = assert false
-  let factor _prob _w = assert false
-  let assume _prob _p = assert false
-  let observe _prob _d _x = assert false
-
-  let infer ?(_n = 1000) _model _obs =
-    assert false
+  type prob = {mutable score: float}
+  let sample _prob d = Distribution.draw d
+  let factor prob w = prob.score <- prob.score +. w
+  let assume prob p = if not p then factor prob (-.infinity)
+  let observe prob d x = factor prob (Distribution.logpdf d x)
+  let infer ?(n = 1000) model obs =
+    let gen _ = 
+      let prob = {score = 0.} in
+      let v = model prob obs in
+      (v, prob.score)
+    in
+    let support = List.init n gen in
+    Distribution.categorical ~support
 end

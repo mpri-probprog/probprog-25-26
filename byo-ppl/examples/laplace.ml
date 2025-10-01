@@ -1,7 +1,7 @@
 open Byoppl
 open Distribution
 
-(* open Basic.Rejection_sampling
+(* open Basic.Rejection_sampling_hard
 
    let laplace prob () =
      let p = sample prob (uniform ~a:0. ~b:1.) in
