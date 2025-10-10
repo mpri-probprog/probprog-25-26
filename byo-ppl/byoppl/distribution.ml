@@ -150,7 +150,7 @@ let logpdf : type a. a t -> a -> float =
 
 let mean : float t -> float = function
   | Dirac v -> v
-  | Uniform (a, b) -> a +. (b /. 2.)
+  | Uniform (a, b) -> (a +. b) /. 2.
   | Beta (a, b) -> a /. (a +. b)
   | Gaussian (mu, _) -> mu
   | Categorical support ->
