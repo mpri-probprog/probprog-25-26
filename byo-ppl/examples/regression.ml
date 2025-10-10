@@ -17,8 +17,44 @@ let data =
       (Float.of_int i, (Float.of_int i *. a) +. b +. w))
 
 let _ =
-  Format.printf "@.-- Regressin, Basic Importance Sampling --@.";
+  Format.printf "@.-- Regression, Basic Importance Sampling --@.";
   let a_dist, b_dist = split (infer ~n:100_000 regression data) in
+  let a_m = mean a_dist in
+  let b_m = mean b_dist in
+  Format.printf "Regression: a=%f, b=%f@." a_m b_m
+
+open Basic.Simple_metropolis
+
+let regression prob data =
+  let a = sample prob (gaussian ~mu:0. ~sigma:2.) in
+  let b = sample prob (gaussian ~mu:0. ~sigma:2.) in
+  List.iter
+    (fun (x, y) -> observe prob (gaussian ~mu:((a *. x) +. b) ~sigma:0.01) y)
+    data;
+  (a, b)
+
+let _ =
+  Format.printf "@.-- Regression, Simple Metropolis --@.";
+  let a_dist, b_dist = split (infer ~n:100_000 regression data) in
+  let a_m = mean a_dist in
+  let b_m = mean b_dist in
+  Format.printf "Regression: a=%f, b=%f@." a_m b_m
+
+open Basic.Metropolis_hastings
+
+let regression prob data =
+  let a = sample prob (gaussian ~mu:0. ~sigma:2.) "a" in
+  let b = sample prob (gaussian ~mu:0. ~sigma:2.) "b" in
+  List.iter
+    (fun (x, y) -> observe prob (gaussian ~mu:((a *. x) +. b) ~sigma:0.01) y)
+    data;
+  (a, b)
+
+let _ =
+  Format.printf "@.-- Regression, Metropolis Hastings --@.";
+  let a_dist, b_dist =
+    split (infer ~n:100_000 ~warmup:100_000 regression data)
+  in
   let a_m = mean a_dist in
   let b_m = mean b_dist in
   Format.printf "Regression: a=%f, b=%f@." a_m b_m
